@@ -1,0 +1,22 @@
+{
+  "name": "practice",
+  "version": "1.0.0",
+  "description": "",
+  "main": "0125-1-func01.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ashleyc2219/node-practice.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ashleyc2219/node-practice/issues"
+  },
+  "homepage": "https://github.com/ashleyc2219/node-practice#readme",
+  "dependencies": {
+    "dotenv": "^14.3.0"
+  }
+}
