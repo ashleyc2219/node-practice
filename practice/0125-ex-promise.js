@@ -9,28 +9,36 @@ function writeData(req, res) {
             if (error) {
                 reject('failed')
             } else {
-                resolve('success!')
+                resolve({
+                    "msg": "success",
+                    "filePath": __dirname + '/headers.txt',
+                })
             }
         });
 
     })
 }
-
 const server = http.createServer((req, res) => {
     res.writeHead(200, {
         "Content-Type": "application/json; charset=utf8"
     })
     writeData(req, res)
-        .then((msg) => {
-            res.write('writeFile: ' + msg)
-        }).then(() => {
-            fs.readFile('./headers.txt', (error, data) => {
+        .then((obj) => {
+            res.write('writeFile: ' + obj.msg);
+            return (obj.filePath)
+        }).then((r) => {
+            fs.readFile(r, (error, data) => {
                 if (error) {
                     reject(error)
                 } else {
-                    res.end(data)
+                    resolve(data)
                 }
             });
+        }).then((msg) => {
+            console.log(msg.toString());
+            res.end(msg)
+        }).catch((msg) => {
+            res.end(msg)
         })
 })
 
