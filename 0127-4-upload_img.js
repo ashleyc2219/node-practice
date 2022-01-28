@@ -4,8 +4,8 @@ const fs = require('fs').promises;
 const app = express();
 // require multer
 const multer = require('multer');
-// 指定暫資料夾的位置
-const upload = multer({dest: 'tmp_uploads/'})
+// 指定暫存資料夾的位置
+const upload = multer({ dest: 'tmp_uploads/' })
 
 app.set('view engine', 'ejs')
 app.use(express.urlencoded({ extended: false }))
@@ -16,7 +16,7 @@ app.get('/', function (req, res) {
     res.render('home', { name: 'Ashley' })
 })
 // 上傳檔案
-app.post('/try-upload', upload.single('avatar'), async(req, res)=>{
+app.post('/try-upload', upload.single('avatar'), async (req, res) => {
     const file = req.file;
     const types = ['image/jpeg', 'image/png'];
     if (file && file.originalname) {
