@@ -5,7 +5,8 @@ const app = express();
 // require multer
 const multer = require('multer');
 // 指定暫存資料夾的位置
-const upload = multer({ dest: 'tmp_uploads/' })
+// const upload = multer({ dest: 'tmp_uploads/' })
+const upload = require(__dirname + '/modules/upload-images');
 
 app.set('view engine', 'ejs')
 app.use(express.urlencoded({ extended: false }))
@@ -17,15 +18,19 @@ app.get('/', function (req, res) {
 })
 // 上傳檔案
 app.post('/try-upload', upload.single('avatar'), async (req, res) => {
-    const file = req.file;
-    const types = ['image/jpeg', 'image/png'];
-    if (file && file.originalname) {
-        if (types.includes(file.mimetype)) {
-            await fs.rename(file.path, __dirname + '/public/img/' + file.originalname);
-            return res.redirect('/img/' + file.originalname)
+    res.json(req.file)
+})
+
+app.post('/try-uploads', upload.array('photos'), async(req, res)=>{
+    const result = req.files.map(el => {
+        return {
+            mimetype: el.mimetype,
+            filename: el.filename,
+            size: el.size,
         }
-    }
-    res.end('finger cross!')
+    });
+    res.json(result)
+    
 })
 
 app.use((req, res) => {
