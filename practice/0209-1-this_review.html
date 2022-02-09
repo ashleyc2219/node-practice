@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>this</title>
+</head>
+
+<body>
+    <script>
+        const shape = {
+            attr1: 10,
+            //  包在function中的this 是shape
+            meth1: function () {
+                console.log('meth1: this: ', this);
+                return this.attr1;
+            },
+            // 箭頭函式中的this 是上一層function指的物件(window)
+            meth2: () => {
+                console.log('meth2: this: ', this);
+                return this.attr1 * 2;
+            },
+            // 和meth1的概念相同，寫法不同而已，所以是shape
+            meth3() {
+                console.log('meth3: this: ', this);
+                return this.attr1 * 3;
+            },
+            
+            attr2: this.attr1,
+            attr3: this,
+            // 箭頭函式return 的this式上一層function 指的物件(shape) 
+            meth4: function () {
+                return (() => {
+                    console.log('meth4->()=>{}: this: ', this);
+                    return this.attr1 * 4;
+                })();
+            },
+        }
+    </script>
+</body>
+
+</html>
