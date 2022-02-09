@@ -1,0 +1,35 @@
+<%- include('../parts/html-head.ejs') %>
+<%- include('../parts/nav.ejs') %>
+
+
+<div class="container">
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th scope="col">#ID</th>
+                <th scope="col">品名</th>
+                <th scope="col">庫存</th>
+                <th scope="col">介紹</th>
+                <th scope="col">狀態</th>
+                <th scope="col">創建時間</th>
+            </tr>
+        </thead>
+        <tbody>
+            <% for(let i of rows){ %>
+                <tr>
+                  <td><%= i.pro_id %></td>
+                  <td><%= i.pro_name %></td>
+                  <td><%= i.pro_stock %></td>
+                  <td><%= i.pro_intro %></td>
+                  <td><%= i.pro_condition %></td>
+                  <td><%= i.pro_creat_time %></td>
+                </tr>
+                <% } %>
+        </tbody>
+
+    </table>
+
+
+</div>
+<%- include('../parts/script.ejs') %>
+<%- include('../parts/html-foot.ejs') %>
