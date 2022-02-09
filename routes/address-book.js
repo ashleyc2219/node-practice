@@ -5,7 +5,7 @@ const router = express.Router();
 
  async function getListData(req, res){
     // 每頁呈現幾筆資料
-    const perPage = 5;
+    const perPage = 7;
     // 用req.query去得知，用戶要看第幾頁
     let page = req.query.page ? parseInt(req.query.page) : 1;
     

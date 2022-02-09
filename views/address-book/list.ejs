@@ -3,31 +3,44 @@
 
 
 <div class="container">
-    <table class="table table-striped">
-        <thead>
-            <tr>
-                <th scope="col">#ID</th>
-                <th scope="col">品名</th>
-                <th scope="col">庫存</th>
-                <th scope="col">介紹</th>
-                <th scope="col">狀態</th>
-                <th scope="col">創建時間</th>
-            </tr>
-        </thead>
-        <tbody>
-            <% for(let i of rows){ %>
+    <div class="row">
+        <nav aria-label="Page navigation example">
+            <ul class="pagination">
+              <li class="page-item <%= page===1?'disabled':'' %>"><a class="page-link" href='?page=<%= page-1 %>'>Previous</a></li>
+              <% for(let i=1; i <= totalPages; i++){ %> 
+              <li class="page-item"><a class="page-link" href='?page=<%= i %>' ><%= i %> </a></li>
+              <% } %> 
+              <li class="page-item <%= page===totalPages?'disabled':'' %>"><a class="page-link" href="?page=<%= page+1 %>">Next</a></li>
+            </ul>
+          </nav>
+    </div>
+    <div class="row">
+        <p><%= page %> </p>
+        <table class="table table-striped">
+            <thead>
                 <tr>
-                  <td><%= i.pro_id %></td>
-                  <td><%= i.pro_name %></td>
-                  <td><%= i.pro_stock %></td>
-                  <td><%= i.pro_intro %></td>
-                  <td><%= i.pro_condition %></td>
-                  <td><%= i.pro_creat_time %></td>
+                    <th scope="col">#ID</th>
+                    <th scope="col">品名</th>
+                    <th scope="col">庫存</th>
+                    <th scope="col">介紹</th>
+                    <th scope="col">狀態</th>
+                    <th scope="col">創建時間</th>
                 </tr>
-                <% } %>
-        </tbody>
-
-    </table>
+            </thead>
+            <tbody>
+                <% for(let i of rows){ %>
+                    <tr>
+                      <td><%= i.pro_id %></td>
+                      <td><%= i.pro_name %></td>
+                      <td><%= i.pro_stock %></td>
+                      <td><%= i.pro_intro %></td>
+                      <td><%= i.pro_condition %></td>
+                      <td><%= i.pro_creat_time %></td>
+                    </tr>
+                    <% } %>
+            </tbody>
+        </table>
+    </div>
 
 
 </div>
