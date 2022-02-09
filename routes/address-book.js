@@ -3,19 +3,34 @@ const db = require('./../modules/connect-db');
 
 const router = express.Router();
 
- async function getListData(req, res){
+async function getListData(req, res) {
     // 每頁呈現幾筆資料
     const perPage = 7;
     // 用req.query去得知，用戶要看第幾頁
     let page = req.query.page ? parseInt(req.query.page) : 1;
-    
+    let search = req.query.search ? (req.query.search).trim() : '';
+
+    // 要傳到ejs的條件
+    let conditions = {};
+
+    // 搜尋功能 用sql語法去搜尋
+    let sqlWhere = ' WHERE 1';
+    if (search) {
+        // escape 是 module mysql2的功能，會針對sql語法去跳脫字元
+        sqlWhere = ` WHERE \`pro_name\` LIKE ${db.escape('%' + search + '%')} `;
+        conditions.search = search;
+    }
+    // res.json(sqlWhere);
+
     // 輸出在頁面上的資料
     const output = {
         perPage,
         page,
         totalRows: 0,
         totalPages: 0,
-        rows:[]
+        rows: [],
+        // 要把conditions 傳到ejs
+        conditions
     };
     // sql的程式碼，得知該資料表有幾筆資料，num是幫欄位取名字
     const t_sql = "SELECT COUNT(1) num FROM product_sake";
@@ -24,26 +39,26 @@ const router = express.Router();
     if (page < 1) {
         return res.redirect(`/address-book/list`);
     }
-    if(totalRows){
-        output.totalPages = Math.ceil(totalRows/perPage);
+    if (totalRows) {
+        output.totalPages = Math.ceil(totalRows / perPage);
         output.totalRows = totalRows;
         // 呈現該頁的資料
         // limit a, b - a: 起始資料的index、b: 從a資料向後呈現幾筆，
-        const sql = `SELECT * FROM product_sake LIMIT ${perPage*(page-1)}, ${perPage}`;
+        const sql = `SELECT * FROM product_sake ${sqlWhere} LIMIT ${perPage * (page - 1)}, ${perPage}`;
         const [rs2] = await db.query(sql);
-        rs2.forEach(el=>[
+        rs2.forEach(el => [
             el.pro_creat_time = res.locals.toDateString(el.pro_creat_time)
         ])
         output.rows = rs2;
-        
+
     }
-    return(output)
+    return (output)
 };
 
-router.get('/list', async (req, res)=>{
+router.get('/list', async (req, res) => {
     res.render('address-book/list', await getListData(req, res));
 })
-router.get('/api/list', async (req, res)=>{
+router.get('/api/list', async (req, res) => {
     res.json(await getListData(req, res))
 })
 
