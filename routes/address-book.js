@@ -43,8 +43,8 @@ const router = express.Router();
 router.get('/list', async (req, res)=>{
     res.render('address-book/list', await getListData(req, res));
 })
-router.get('/api/list', (req, res)=>{
-    res.json(getListData(req, res))
+router.get('/api/list', async (req, res)=>{
+    res.json(await getListData(req, res))
 })
 
 module.exports = router;
