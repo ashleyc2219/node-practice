@@ -1,0 +1,42 @@
+<%- include('../parts/html-head.ejs') %>
+<%- include('../parts/nav.ejs') %>
+
+
+<div class="container">
+    <div class="row">
+        <div class="card col-6 m-auto">
+            <div class="card-body">
+              <h5 class="card-title">新增資料</h5>
+              <form name="form1" onsubmit="checkForm(); return false;"> 
+                <div class="mb-3">
+                  <label for="name" class="form-label">品名</label>
+                  <input type="text" class="form-control" id="name" name="name">
+                </div>
+                <div class="mb-3">
+                  <label for="stock" class="form-label">庫存</label>
+                  <input type="text" class="form-control" id="stock" name="stock">
+                </div>
+                <div class="mb-3">
+                  <label for="intro" class="form-label">介紹</label>
+                  <input type="text" class="form-control" id="intro" name="intro">
+                </div>
+                <div class="mb-3">
+                  <label for="condition" class="form-label">狀態</label>
+                  <input type="text" class="form-control" id="condition" name="condition">
+                </div>
+                <div class="mb-3">
+                  <label for="time" class="form-label">創建時間</label>
+                  <input type="text" class="form-control" id="time" name="time">
+                </div>
+                
+                <button type="submit" class="btn btn-primary">Submit</button>
+              </form>
+              
+            </div>
+          </div>
+    </div>
+
+
+</div>
+<%- include('../parts/script.ejs') %>
+<%- include('../parts/html-foot.ejs') %>
