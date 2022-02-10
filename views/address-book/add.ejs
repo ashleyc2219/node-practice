@@ -39,4 +39,20 @@
 
 </div>
 <%- include('../parts/script.ejs') %>
+<!-- 在前端使用joi -->
+<script src="/joi/joi-browser.min.js"></script>
+<script>
+    // 測試 joi
+    const Joi = joi;
+    const schema = Joi.object({
+      username: Joi.string().alphanum().min(6).max(20).required(),
+
+      age: Joi.number().required(),
+    });
+
+    // 一遇到錯誤，就break並報錯
+    console.log( schema.validate({username:'abc', age:'xyz'}));
+    // 遇到錯誤繼續執行，將所有資料錯誤回報
+    console.log( schema.validate({username:'abc', age:'xyz'}, {abortEarly: false}));
+</script>
 <%- include('../parts/html-foot.ejs') %>

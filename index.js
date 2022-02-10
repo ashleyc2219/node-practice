@@ -18,6 +18,7 @@ app.set('view engine', 'ejs')
 app.use(express.urlencoded({ extended: false }))
 app.use(express.json())
 app.use(express.static('public'))
+app.use('/joi',express.static('node_modules/joi/dist'))
 
 app.use(session({
     saveUninitialized: false,
