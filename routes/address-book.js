@@ -1,5 +1,6 @@
 const express = require('express');
 const db = require('./../modules/connect-db');
+const upload = require('./../modules/upload-images')
 
 const router = express.Router();
 
@@ -66,7 +67,20 @@ router.get('/api/list', async (req, res) => {
 router.get('/add', (req, res) => {
     res.render('address-book/add');
 });
-router.post('/add', async (req, res)=>{
-    
+// 用multer(upload中介軟體)去處理multipart/form-data
+router.post('/add2', upload.none(), async (req, res)=>{
+    res.json(req.body);
 });
+// 處裡下面兩種類型的資料
+// application/x-www-form-urlencoded
+// application/json
+router.post('/add', async(req, res)=>{
+
+    const sql = "INSERT INTO `product_sake` SET ?";
+    const obj = {...req.body, pro_creat_time: new Date()};
+
+    const [result] = await db.query(sql, [obj]);
+    console.log(result);
+    res.json(result)
+})
 module.exports = router;

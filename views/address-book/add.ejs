@@ -1,58 +1,91 @@
 <%- include('../parts/html-head.ejs') %>
-<%- include('../parts/nav.ejs') %>
+  <%- include('../parts/nav.ejs') %>
 
 
-<div class="container">
-    <div class="row">
+    <div class="container">
+      <div class="row">
         <div class="card col-6 m-auto">
-            <div class="card-body">
-              <h5 class="card-title">新增資料</h5>
-              <form name="form1" onsubmit="checkForm(); return false;"> 
-                <div class="mb-3">
-                  <label for="name" class="form-label">品名</label>
-                  <input type="text" class="form-control" id="name" name="name">
-                </div>
-                <div class="mb-3">
-                  <label for="stock" class="form-label">庫存</label>
-                  <input type="text" class="form-control" id="stock" name="stock">
-                </div>
-                <div class="mb-3">
-                  <label for="intro" class="form-label">介紹</label>
-                  <input type="text" class="form-control" id="intro" name="intro">
-                </div>
-                <div class="mb-3">
-                  <label for="condition" class="form-label">狀態</label>
-                  <input type="text" class="form-control" id="condition" name="condition">
-                </div>
-                <div class="mb-3">
+          <div class="card-body">
+            <h5 class="card-title">新增資料</h5>
+            <form name="form1" onsubmit="checkForm(); return false;">
+              <div class="mb-3">
+                <label for="name" class="form-label">品名</label>
+                <input type="text" class="form-control" id="pro_name" name="pro_name">
+              </div>
+              <div class="mb-3">
+                <label for="stock" class="form-label">庫存</label>
+                <input type="text" class="form-control" id="pro_stock" name="pro_stock">
+              </div>
+              <div class="mb-3">
+                <label for="intro" class="form-label">介紹</label>
+                <input type="text" class="form-control" id="pro_intro" name="pro_intro">
+              </div>
+              <div class="mb-3">
+                <label for="condition" class="form-label">狀態</label>
+                <input type="text" class="form-control" id="pro_condition" name="pro_condition">
+              </div>
+              <!-- <div class="mb-3">
                   <label for="time" class="form-label">創建時間</label>
                   <input type="text" class="form-control" id="time" name="time">
-                </div>
-                
-                <button type="submit" class="btn btn-primary">Submit</button>
-              </form>
-              
-            </div>
+                </div> -->
+
+              <button type="submit" class="btn btn-primary">Submit</button>
+            </form>
+
           </div>
+        </div>
+      </div>
+
+
     </div>
+    <%- include('../parts/script.ejs') %>
+      <!-- 在前端使用joi -->
+      <script src="/joi/joi-browser.min.js"></script>
+      <script>
+        function checkForm() {
+          const fd = new FormData(document.form1);
+          console.log([...fd]);
+          const usp = new URLSearchParams(fd);
+          console.log([...usp]);
+          const dataObj = {};
+          for (const i of fd) {
+            dataObj[i[0]] = i[1];
+          }
+          console.log(dataObj);
+
+          // 用multer(upload中介軟體)去處理multipart/form-data
+          // fetch('/address-book/add2', {
+          //   method: 'POST', 
+          //   body: fd,
+          // }).then(r=>r.json())
+          // .then(obj=>{
+          //   console.log(obj);
+          // })
+
+          fetch('', {
+            method: 'POST',
+            body: JSON.stringify(dataObj),
+            headers: {
+              'Content-Type': 'application/json'
+            }
+          }).then(r => r.json())
+            .then(obj => {
+              console.log(obj);
+            });
 
 
-</div>
-<%- include('../parts/script.ejs') %>
-<!-- 在前端使用joi -->
-<script src="/joi/joi-browser.min.js"></script>
-<script>
-    // 測試 joi
-    const Joi = joi;
-    const schema = Joi.object({
-      username: Joi.string().alphanum().min(6).max(20).required(),
+        }
+        // 測試 joi
+        const Joi = joi;
+        const schema = Joi.object({
+          username: Joi.string().alphanum().min(6).max(20).required(),
 
-      age: Joi.number().required(),
-    });
+          age: Joi.number().required(),
+        });
 
     // 一遇到錯誤，就break並報錯
-    console.log( schema.validate({username:'abc', age:'xyz'}));
+    // console.log( schema.validate({username:'abcasdfadf', age:'20'}));
     // 遇到錯誤繼續執行，將所有資料錯誤回報
-    console.log( schema.validate({username:'abc', age:'xyz'}, {abortEarly: false}));
-</script>
-<%- include('../parts/html-foot.ejs') %>
+    // console.log( schema.validate({username:'abcadsfasdf', age:'19'}, {abortEarly: false}));
+      </script>
+      <%- include('../parts/html-foot.ejs') %>
