@@ -100,4 +100,42 @@ router.post('/add', async(req, res)=>{
 
     res.json(output)
 })
+
+// 刪除功能
+//  /:pro_id、req.params.pro_id 是一組的
+router.get('/delete/:pro_id', async (req,res)=>{
+    const sql = "DELETE FROM `product_sake` WHERE `pro_id`=?";
+    const [result] = await db.query(sql, [req.params.pro_id]);
+    if(! result.length){
+        return res.redirect('/address-book/list');
+    }
+
+    res.render('address-book/edit', result[0]);
+})
+
+// 編輯功能
+router.get('/edit/:pro_id', async(req, res)=>{
+    const sql = "SELECT * FROM `product_sake` WHERE `pro_id`=?";
+    const [result] = await db.query(sql, [req.params.pro_id]);
+
+    if(! result.length){
+        return res.redirect('/address-book/list');
+    }
+
+    res.render('address-book/edit', result[0]);
+})
+router.post('/edit/:pro_id', async(req, res)=>{
+    const output = {
+        success: false, 
+        error: ''
+    };
+    const sql = "UPDATE `product_sake` SET ? WHERE `pro_id`=?";
+    const [result] = await db.query(sql, [req.body, req.params.pro_id]);
+
+    console.log(result);
+    output.success = !! result.changedRows;
+    output.result = result;
+
+    res.json(output);
+})
 module.exports = router;

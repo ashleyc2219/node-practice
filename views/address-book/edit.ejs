@@ -1,0 +1,83 @@
+<%- include('../parts/html-head.ejs') %>
+  <%- include('../parts/nav.ejs') %>
+
+
+    <div class="container">
+      <div class="row">
+        <div class="card col-6 m-auto">
+          <div class="card-body">
+            <h5 class="card-title">修改資料</h5>
+            <form name="form1" onsubmit="checkForm(); return false;">
+              <div class="mb-3">
+                <label for="name" class="form-label">品名</label>
+                <input type="text" class="form-control" id="pro_name" name="pro_name" value="<%= pro_name %> ">
+              </div>
+              <div class="mb-3">
+                <label for="stock" class="form-label">庫存</label>
+                <input type="text" class="form-control" id="pro_stock" name="pro_stock" value="<%= pro_stock %> ">
+              </div>
+              <div class="mb-3">
+                <label for="intro" class="form-label">介紹</label>
+                <input type="text" class="form-control" id="pro_intro" name="pro_intro" value="<%= pro_intro %> ">
+              </div>
+              <div class="mb-3">
+                <label for="condition" class="form-label">狀態</label>
+                <input type="text" class="form-control" id="pro_condition" name="pro_condition" value="<%= pro_condition %> ">
+              </div>
+              <!-- 如果有時間的話，就要再把時間string轉換成規定的格式 -->
+              <!-- <div class="mb-3">
+                  <label for="time" class="form-label">創建時間</label>
+                  <input type="text" class="form-control" id="time" name="time">
+                </div> -->
+
+              <button type="submit" class="btn btn-primary">Submit</button>
+            </form>
+
+          </div>
+        </div>
+      </div>
+
+
+    </div>
+    <%- include('../parts/script.ejs') %>
+      <!-- 在前端使用joi -->
+      <script src="/joi/joi-browser.min.js"></script>
+      <script>
+        function checkForm() {
+          const fd = new FormData(document.form1);
+  
+          const dataObj = {};
+          for (const i of fd) {
+            dataObj[i[0]] = i[1];
+          }
+
+          fetch('', {
+            method: 'POST',
+            body: JSON.stringify(dataObj),
+            headers: {
+              'Content-Type': 'application/json'
+            }
+          }).then(r => r.json())
+            .then(obj => {
+              console.log(obj);
+              if (!obj.success) {
+                alert('資料沒有變更')
+              }
+            });
+
+
+        }
+        // 測試 joi
+        const Joi = joi;
+        const schema = Joi.object({
+          username: Joi.string().alphanum().min(6).max(20).required(),
+
+          age: Joi.number().required(),
+        });
+
+    // 一遇到錯誤，就break並報錯
+    // console.log( schema.validate({username:'abcasdfadf', age:'20'}));
+    // 遇到錯誤繼續執行，將所有資料錯誤回報
+    // console.log( schema.validate({username:'abcadsfasdf', age:'19'}, {abortEarly: false}));
+      </script>
+      <%- include('../parts/html-foot.ejs') %>

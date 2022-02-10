@@ -1,49 +1,75 @@
 <%- include('../parts/html-head.ejs') %>
-<%- include('../parts/nav.ejs') %>
+    <%- include('../parts/nav.ejs') %>
 
 
-<div class="container">
-    <div class="row">
-        <nav aria-label="Page navigation example">
-            <ul class="pagination">
-            <!-- 使用URLSearchParams來生成url(query string) -->
-              <li class="page-item <%= page===1?'disabled':'' %>"><a class="page-link" href='?<%- new URLSearchParams({...conditions, page: page-1}) %>'>Previous</a></li>
-              <% for(let i=1; i <= totalPages; i++){ %> 
-              <li class="page-item"><a class="page-link" href='?<%- new URLSearchParams({...conditions, page: i}) %>' ><%= i %> </a></li>
-              <% } %> 
-              <li class="page-item <%- page===totalPages?'disabled':'' %>"><a class="page-link" href="?<%- new URLSearchParams({...conditions, page: page+1}) %>">Next</a></li>
-            </ul>
-          </nav>
-    </div>
-    <div class="row">
-        <p><%= page %> </p>
-        <table class="table table-striped">
-            <thead>
-                <tr>
-                    <th scope="col">#ID</th>
-                    <th scope="col">品名</th>
-                    <th scope="col">庫存</th>
-                    <th scope="col">介紹</th>
-                    <th scope="col">狀態</th>
-                    <th scope="col">創建時間</th>
-                </tr>
-            </thead>
-            <tbody>
-                <% for(let i of rows){ %>
-                    <tr>
-                      <td><%= i.pro_id %></td>
-                      <td><%= i.pro_name %></td>
-                      <td><%= i.pro_stock %></td>
-                      <td><%= i.pro_intro %></td>
-                      <td><%= i.pro_condition %></td>
-                      <td><%= i.pro_creat_time %></td>
-                    </tr>
-                    <% } %>
-            </tbody>
-        </table>
-    </div>
+        <div class="container">
+            <div class="row">
+                <nav aria-label="Page navigation example">
+                    <ul class="pagination">
+                        <!-- 使用URLSearchParams來生成url(query string) -->
+                        <li class="page-item <%= page===1?'disabled':'' %>"><a class="page-link"
+                                href='?<%- new URLSearchParams({...conditions, page: page-1}) %>'>Previous</a></li>
+                        <% for(let i=1; i <=totalPages; i++){ %>
+                            <li class="page-item"><a class="page-link"
+                                    href='?<%- new URLSearchParams({...conditions, page: i}) %>'>
+                                    <%= i %>
+                                </a></li>
+                            <% } %>
+                                <li class="page-item <%- page===totalPages?'disabled':'' %>"><a class="page-link"
+                                        href="?<%- new URLSearchParams({...conditions, page: page+1}) %>">Next</a></li>
+                    </ul>
+                </nav>
+            </div>
+            <div class="row">
+                <p>
+                    <%= page %>
+                </p>
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th scope="col"><i class="fas fa-trash-alt"></i></th>
+                            <th scope="col">#ID</th>
+                            <th scope="col">品名</th>
+                            <th scope="col">庫存</th>
+                            <th scope="col">介紹</th>
+                            <th scope="col">狀態</th>
+                            <th scope="col">創建時間</th>
+                            <th scope="col"><i class="fas fa-edit"></i></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <% for(let i of rows){ %>
+                            <tr>
+                                <td><a href="/address-book/delete/<%= i.pro_id %>"
+                                        onclick="return confirm('確定要刪除編號為 <%= i.pro_id %> 的資料?')">
+                                        <i class="fas fa-trash-alt"></i>
+                                    </a></td>
+                                <td>
+                                    <%= i.pro_id %>
+                                </td>
+                                <td>
+                                    <%= i.pro_name %>
+                                </td>
+                                <td>
+                                    <%= i.pro_stock %>
+                                </td>
+                                <td>
+                                    <%= i.pro_intro %>
+                                </td>
+                                <td>
+                                    <%= i.pro_condition %>
+                                </td>
+                                <td>
+                                    <%= i.pro_creat_time %>
+                                </td>
+                                <td><a href="/address-book/edit/<%= i.pro_id %>"><i class="fas fa-edit"></i></a></td>
+                            </tr>
+                            <% } %>
+                    </tbody>
+                </table>
+            </div>
 
 
-</div>
-<%- include('../parts/script.ejs') %>
-<%- include('../parts/html-foot.ejs') %>
+        </div>
+        <%- include('../parts/script.ejs') %>
+            <%- include('../parts/html-foot.ejs') %>
