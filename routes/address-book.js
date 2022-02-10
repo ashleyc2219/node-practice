@@ -75,12 +75,29 @@ router.post('/add2', upload.none(), async (req, res)=>{
 // application/x-www-form-urlencoded
 // application/json
 router.post('/add', async(req, res)=>{
+    const output = {
+        success: false,
+        error: ''
+    };
+    // const sql = "INSERT INTO `product_sake` SET ?";
+    // const obj = {...req.body, pro_creat_time: new Date()};
+    // const [result] = await db.query(sql, [obj]);
+    // console.log(result);
+    // res.json(result)
 
-    const sql = "INSERT INTO `product_sake` SET ?";
-    const obj = {...req.body, pro_creat_time: new Date()};
-
-    const [result] = await db.query(sql, [obj]);
+    const sql = "INSERT INTO `product_sake`(`pro_name`, `pro_stock`, `pro_intro`, `pro_condition`, `pro_creat_time`) VALUES (?, ?, ?, ?, NOW())";
+    // result 需用[]包起來，因為回傳值是array，可以參照array 接值 補充
+    const [result] = await db.query(sql, [
+        req.body.pro_name,
+        req.body.pro_stock,
+        req.body.pro_intro,
+        req.body.pro_condition
+    ]);
     console.log(result);
-    res.json(result)
+    output.success = !! result.affectedRows;
+    output.result = result;
+    // console.log(output);
+
+    res.json(output)
 })
 module.exports = router;
