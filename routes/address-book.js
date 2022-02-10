@@ -4,13 +4,11 @@ const db = require('./../modules/connect-db');
 const router = express.Router();
 
 async function getListData(req, res) {
-    // 每頁呈現幾筆資料
     const perPage = 7;
-    // 用req.query去得知，用戶要看第幾頁
     let page = req.query.page ? parseInt(req.query.page) : 1;
     let search = req.query.search ? (req.query.search).trim() : '';
 
-    // 要傳到ejs的條件
+    // 要傳到ejs的條件，能作為搜尋結果的頁碼
     let conditions = {};
 
     // 搜尋功能 用sql語法去搜尋
@@ -20,22 +18,24 @@ async function getListData(req, res) {
         sqlWhere = ` WHERE \`pro_name\` LIKE ${db.escape('%' + search + '%')} `;
         conditions.search = search;
     }
-    // res.json(sqlWhere);
+    // 除錯用，確定sql語法
+    // res.json(sqlWhere); 
 
-    // 輸出在頁面上的資料
+    // 輸出資料，會傳到ejs
     const output = {
         perPage,
         page,
         totalRows: 0,
         totalPages: 0,
         rows: [],
-        // 要把conditions 傳到ejs
+        // 新增conditions 才能把搜尋的傳到ejs
         conditions
     };
     // sql的程式碼，得知該資料表有幾筆資料，num是幫欄位取名字
     const t_sql = "SELECT COUNT(1) num FROM product_sake";
     const [rs1] = await db.query(t_sql);
     const totalRows = rs1[0].num;
+    // 若在query string 輸入<1的頁數，就會跳轉
     if (page < 1) {
         return res.redirect(`/address-book/list`);
     }
@@ -55,11 +55,18 @@ async function getListData(req, res) {
     return (output)
 };
 
+// 將拿取資料寫成一個function 可以重複使用，拿去渲染不同模式的頁面
 router.get('/list', async (req, res) => {
     res.render('address-book/list', await getListData(req, res));
 })
 router.get('/api/list', async (req, res) => {
     res.json(await getListData(req, res))
 })
-
+// 導向新增資料的頁面
+router.get('/add', (req, res) => {
+    res.render('address-book/add');
+});
+router.post('/add', async (req, res)=>{
+    
+});
 module.exports = router;
