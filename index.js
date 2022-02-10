@@ -13,8 +13,13 @@ const sessionStore = new MysqlStore({}, db);
 const app = express();
 const multer = require('multer');
 const upload = require(__dirname + '/modules/upload-images');
+// cors 跨源請求
+const cors = require('cors');
 
 app.set('view engine', 'ejs')
+
+// Top-level middleware
+app.use(cors())
 app.use(express.urlencoded({ extended: false }))
 app.use(express.json())
 app.use(express.static('public'))
