@@ -15,11 +15,23 @@ const multer = require('multer');
 const upload = require(__dirname + '/modules/upload-images');
 // cors 跨源請求
 const cors = require('cors');
+// node fetch
+const fetch = (...args) => import('node-fetch').then(({default: fetch}) => fetch(...args));
+// require axios
+const axios = require('axios');
 
 app.set('view engine', 'ejs')
 
 // Top-level middleware
-app.use(cors())
+// 設定白名單，允許跨源
+const corsOptions = {
+    credentials: true,
+    origin: function(origin, cb){
+        console.log({origin});
+        cb(null, true);
+    }
+};
+app.use(cors(corsOptions));
 app.use(express.urlencoded({ extended: false }))
 app.use(express.json())
 app.use(express.static('public'))
@@ -90,6 +102,21 @@ app.get('/try-connectdb', async (req, res) => {
     const [results, fields] = await db.query(sql);
     res.json(results)
 })
+
+app.get('/yahoo', async (req, res)=>{
+    fetch('https://tw.yahoo.com/')
+        .then(r=>r.text())
+        .then(txt=>{
+            res.send(txt);
+        });
+});
+
+// 使用axios
+app.get('/yahoo2', async (req, res)=>{
+    const response = await axios.get('https://tw.yahoo.com/');
+    console.log(response);
+    res.send(response.data);
+});
 
 app.use((req, res) => {
     res.status(404);
