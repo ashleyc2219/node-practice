@@ -13,7 +13,7 @@
         // 可以使用 http://localhost:3000/cors01.html 進入，因為是同源
         // 如果用 http://127.0.0.1:3000/cors01.html 進入這個網頁，就會被擋住，因為被視為不同源
         // //localhost:3000/address-book/api/list 不限制協定
-        fetch('http://localhost:3000/address-book/api/list').then(r=>r.json()).then(obj=>{
+        fetch('http://127.0.0.1:3000/try-session').then(r=>r.json()).then(obj=>{
             console.log(obj);
             document.querySelector('#pre').innerText = JSON.stringify(obj, null, 4)
         })
