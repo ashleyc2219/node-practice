@@ -77,6 +77,7 @@ app.post('/try-uploads', upload.array('photos'), async (req, res) => {
 
 })
 app.use('/address-book',  require('./routes/address-book') );
+
 app.get('/try-session', (req, res) => {
     req.session.my_var = req.session.my_var || 0;
     req.session.my_var++;
