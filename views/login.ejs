@@ -54,6 +54,16 @@
                     const obj = await r.json();
 
                     console.log(obj);
+
+                    // 加上JWT
+
+                    if (obj.success) {
+                        localStorage.setItem("admin_info", JSON.stringify(obj.info));
+                        localStorage.setItem("admin_token", obj.token);
+                        alert("登入成功");
+                    } else {
+                        alert(obj.error || "登入失敗");
+                    }
                 }
             </script>
             <%- include('parts/html-foot.ejs') %>
