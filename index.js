@@ -20,6 +20,7 @@ const fetch = (...args) => import('node-fetch').then(({default: fetch}) => fetch
 // require axios
 const axios = require('axios');
 
+const jwt = require('jsonwebtoken')
 const bcrypt = require('bcryptjs')
 
 app.set('view engine', 'ejs')
@@ -94,7 +95,7 @@ app.post('/login', async (req, res)=>{
     };
     
 
-    const [rs] = await db.query('SELECT * FROM admin WHERE admin_name=?', [req.body.account]);
+    const [rs] = await db.query('SELECT `admin_id`, `admin_name`, `admin_pass`, `nickname`, `avatar` FROM `admin` WHERE admin_name=?', [req.body.account]);
 
     if(! rs.length){
         output.error = '帳密錯誤';
@@ -110,9 +111,10 @@ app.post('/login', async (req, res)=>{
         return res.json(output);
     }
 
-    const {account, avatar, nickname} = row;
+    const {admin_id, admin_name, admin_pass, nickname, avatar} = row;
     output.success = true;
-    output.info = {account, avatar, nickname};
+    output.info = {admin_name, avatar, nickname};
+    output.token = jwt.sign({admin_id, admin_name}, process.env.JWT_KEY);
     res.json(output);
 });
 app.use('/admin',  require('./routes/admin') );
