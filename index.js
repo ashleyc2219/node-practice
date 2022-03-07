@@ -20,6 +20,8 @@ const fetch = (...args) => import('node-fetch').then(({default: fetch}) => fetch
 // require axios
 const axios = require('axios');
 
+const bcrypt = require('bcryptjs')
+
 app.set('view engine', 'ejs')
 
 // Top-level middleware
@@ -83,7 +85,35 @@ app.get('/login', async (req, res)=>{
 });
 // 檢查登入帳密
 app.post('/login', async (req, res)=>{
-    res.json(req.body);
+    const output = {
+        success: false,
+        error: '',
+        info: null,
+        token: '',
+        code: 0,
+    };
+    
+
+    const [rs] = await db.query('SELECT * FROM admin WHERE admin_name=?', [req.body.account]);
+
+    if(! rs.length){
+        output.error = '帳密錯誤';
+        output.code = 401;
+        return res.json(output);
+    }
+    const row = rs[0];
+
+    const compareResult = await bcrypt.compare(req.body.password, row.admin_pass);
+    if(! compareResult){
+        output.error = '帳密錯誤';
+        output.code = 402;
+        return res.json(output);
+    }
+
+    const {account, avatar, nickname} = row;
+    output.success = true;
+    output.info = {account, avatar, nickname};
+    res.json(output);
 });
 app.use('/admin',  require('./routes/admin') );
 
