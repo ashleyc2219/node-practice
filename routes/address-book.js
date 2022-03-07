@@ -6,6 +6,7 @@ const router = express.Router();
 
 async function getListData(req, res) {
     const perPage = 7;
+    // 取得query string現在所在的頁數
     let page = req.query.page ? parseInt(req.query.page) : 1;
     let search = req.query.search ? (req.query.search).trim() : '';
 

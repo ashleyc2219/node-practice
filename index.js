@@ -77,6 +77,15 @@ app.post('/try-uploads', upload.array('photos'), async (req, res) => {
 
 })
 app.use('/address-book',  require('./routes/address-book') );
+// 登入的表單
+app.get('/login', async (req, res)=>{
+    res.render('login');
+});
+// 檢查登入帳密
+app.post('/login', async (req, res)=>{
+    res.json(req.body);
+});
+app.use('/admin',  require('./routes/admin') );
 
 app.get('/try-session', (req, res) => {
     req.session.my_var = req.session.my_var || 0;
