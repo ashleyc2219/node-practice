@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      let obj = null;
+      try {
+        //throw "hello"; // 丟一個錯誤
+        throw new Error("壞掉了");
+        //
+      } catch (ex) {
+        console.log(ex.constructor.name); // 知道類型
+        console.log(ex.message);
+        console.log({ ex });
+      }
+      console.log(obj);
+    </script>
+  </body>
+</html>
