@@ -19,10 +19,31 @@ class Product {
 
     async save(){
         const [result] = await db.query('INSERT INTO `products` SET ?', [this.data])
-        console.log(result);
+        return {
+            success: !! result.insertId,
+            insertId: result.insertId,
+            instance: this,
+        };
     }
 
-    static 
+
+    static async findOne(pk){
+        pk = parseInt(pk);
+
+        if(isNaN(pk) || !pk){
+            // throw new Error('沒有主鍵');
+
+            return null;
+        }
+
+        const [rs] = await db.query(`SELECT * FROM products WHERE sid=${pk}`)
+
+        if(! rs.length){
+            return null;
+        }
+
+        return new Product({...rs[0]});
+    }
 }
 
 module.exports = Product;
