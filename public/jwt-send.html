@@ -11,6 +11,7 @@
 </head>
 
 <body>
+    <button class="btn btn-primary" onclick="sendDataWithOutToken()">Send without token</button>
     <button class="btn btn-primary" onclick="sendData()">Send</button>
 
     <script>
@@ -21,11 +22,16 @@
                 alert('沒有登入')
                 return
             }
-            const r = await fetch('/address-book/api/list', {
+            const r = await fetch('/address-book/api/auth-list', {
                 headers: {
-                    Athorization: 'Bearer ' + admin_token,
+                    Authorization: 'Bearer ' + admin_token,
                 }
             });
+            const obj = await r.json();
+            console.log(obj);
+        }
+        async function sendDataWithOutToken() {
+            const r = await fetch("/address-book/api/auth-list");
             const obj = await r.json();
             console.log(obj);
         }

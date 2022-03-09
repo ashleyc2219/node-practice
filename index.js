@@ -57,6 +57,25 @@ app.use((req, res, next)=>{
     // template helper functions 樣版輔助函式
     res.locals.toDateString = d => moment(d).format('YYYY-MM-DD');
     res.locals.toDatetimeString = d => moment(d).format('YYYY-MM-DD HH:mm:ss');
+
+    // 如果有 token 就解析(驗證)完放在 res.locals.auth
+    res.locals.auth = null;
+    let auth = req.get('Authorization');  // 自訂的變數, 設定有沒有身份驗證, 預設值為 null
+    console.log({auth})
+    if(auth && auth.indexOf('Bearer ')===0){
+        auth = auth.slice(7);
+        // 避免如果遇到假token，會讓整個程式爛掉
+        console.log({auth, k: process.env.JWT_KEY})
+        try{
+            const payload = jwt.verify(auth, process.env.JWT_KEY);
+            res.locals.auth = payload;
+            console.log({payload})
+        }catch(ex){
+            console.log({ex})
+        }
+    }
+
+
     // 前往下一個中介軟體
     next();
 });
@@ -95,7 +114,7 @@ app.post('/login', async (req, res)=>{
     };
     
 
-    const [rs] = await db.query('SELECT `admin_id`, `admin_name`, `admin_pass`, `nickname`, `avatar` FROM `admin` WHERE admin_name=?', [req.body.account]);
+    const [rs] = await db.query('SELECT admin_id, admin_name, admin_pass, nickname, avatar FROM admin WHERE admin_name=?', [req.body.account]);
 
     if(! rs.length){
         output.error = '帳密錯誤';

@@ -64,6 +64,16 @@ router.get('/list', async (req, res) => {
 router.get('/api/list', async (req, res) => {
     res.json(await getListData(req, res))
 })
+
+// 呼叫授權api
+router.get('/api/auth-list', async(req, res)=>{
+    console.log("ab\n", res.locals.auth)
+    if(res.locals.auth && res.locals.auth.admin_name){
+        return res.json({...await getListData(req, res), account: res.locals.auth.admin_name}); // 正常送出資料
+    }else{
+        res.json({success: false, error: '沒有授權'})
+    }
+})
 // 導向新增資料的頁面
 router.get('/add', (req, res) => {
     res.render('address-book/add');
