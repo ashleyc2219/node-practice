@@ -26,6 +26,21 @@ class Product {
         };
     }
 
+    async update(modify={}){
+        // 拿取剛剛findOne那邊的sid 作為這裡的pk
+        const pk = this.data.sid;
+        if(!pk){
+            return {success: false}
+        }
+        const data = {...this.data, ...modify};
+        // 刪除sid避免等等寫入sql語法會干擾
+        deletedata.sid;
+
+        const [result] = await db.query(`UPDATE products SET ? WHERE sid=?`,
+        [data, pk]);
+        console.log(result);
+        return {success: !!result.affectedRows};
+    }
 
     static async findOne(pk){
         pk = parseInt(pk);
